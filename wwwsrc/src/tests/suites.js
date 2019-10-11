@@ -1,14 +1,16 @@
 import store from '../store'
 import { ValuesSuite } from './values'
-import { ProductsSuite } from "./products"
-import { ReviewsSuite } from "./reviews"
-import { OrdersSuite } from "./orders"
+import { QuestionsSuite } from "./questions"
+import { ResponsesSuite } from "./responses"
+import { CategoriesSuite } from "./categories"
+import { AuthChecksSuite } from "./authChecks"
 
 export function loadSuites() {
   store.commit("reloadSuites")
-  new ProductsSuite()
-  new ReviewsSuite()
-  new OrdersSuite()
+  new QuestionsSuite()
+  new ResponsesSuite()
+  new CategoriesSuite()
+  new AuthChecksSuite()
 }
 
 

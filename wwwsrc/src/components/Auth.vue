@@ -46,14 +46,11 @@
             >{{newAccount ? 'Already registered? Login': 'Create new Account'}}</div>
           </div>
         </form>
-        <div class="col-6 offset-lg-3 my-3" v-if="user.email">
-          <h1 class="mb-2 welcome">Welcome, {{user.username}}</h1>
-          <button @click="logout" class="btn btn-info">Logout</button>
+        <div class="d-flex" v-if="user.email">
+          <h3 class="mr-2">Welcome, {{user.username}}</h3>
+          <button @click="logout" class="btn text-info">Logout</button>
         </div>
       </div>
-    </div>
-    <div class="col-12">
-      <hr />
     </div>
   </div>
 </template>

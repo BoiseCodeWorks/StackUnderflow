@@ -15,12 +15,16 @@
           :class="test.success ? 'alert-success' : 'alert-danger'"
           v-if="test.message"
         >
-          <b>Message:</b>
+          <b class="mr-2">Message:</b>
           {{test.message}}
         </p>
         <p v-for="(value, key) in test.routeInfo" :key="key">
-          <b>{{key}}:</b>
+          <b class="mr-2">{{key}}:</b>
           <span>{{value}}</span>
+        </p>
+        <p v-if="test.payload">
+          <b class="mr-2">Payload:</b>
+          <span>{{test.payload}}</span>
         </p>
       </div>
       <div class="card-footer text-right">
