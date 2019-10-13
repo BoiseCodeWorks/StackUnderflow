@@ -20,7 +20,7 @@ export class ResponsesSuite extends Suite {
           })
           this.question = res.data
 
-          testData.productId = res.data.id
+          testData.questionId = res.data.id
 
           this.response = await this.create(testData)
 
