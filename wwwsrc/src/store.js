@@ -1,14 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import auth from "./stores/auth"
+import { authService, SETUSER } from "./Auth/AuthService"
+
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    user: {},
     suites: []
-  },
-  modules: {
-    auth
   },
   mutations: {
     reloadSuites(state) {
@@ -16,9 +16,17 @@ export default new Vuex.Store({
     },
     addSuite(state, suite) {
       state.suites.push(suite)
+    },
+    SETUSER(state, user) {
+      state.user = user
     }
-
   },
   actions: {
+    init({ commit, dispatch }) {
+      authService.subscribe(SETUSER, () => {
+        commit(SETUSER, authService.user)
+      })
+      authService.authenticate()
+    }
   }
 })

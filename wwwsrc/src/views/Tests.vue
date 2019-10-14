@@ -1,7 +1,5 @@
 <template>
-  <div class="home container-fluid">
-    <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
-
+  <div class="container-fluid">
     <div class="row">
       <div class="col-12 mb-3 text-center">
         <div class="d-flex flex-column align-items-center mb-3 mt-3">
@@ -10,13 +8,6 @@
             class="pt-1"
             style="color: orange; border-top: 1px solid black;"
           >Good Questions, Great Answers</em>
-        </div>
-
-        <auth v-if="usesAuth" />
-        <div v-if="usesAuth" class="row">
-          <div class="col-12">
-            <hr />
-          </div>
         </div>
 
         <div class="card border-info">
@@ -64,17 +55,13 @@ import Suite from "@/components/Suite.vue";
 
 export default {
   mounted() {
-    if (this.usesAuth) {
-      this.$store.dispatch("authenticate");
-    }
     this.readMe = JSON.parse(window.localStorage.getItem(this.title));
   },
   name: "tests",
   data() {
     return {
       title: "StackUnderflow",
-      readMe: false,
-      usesAuth: true
+      readMe: false
     };
   },
   computed: {

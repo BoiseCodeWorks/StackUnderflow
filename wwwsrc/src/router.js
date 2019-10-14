@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import AuthRoutes from "./Auth/AuthRouter"
 import Home from './views/Home.vue'
 import Question from './views/Question.vue'
-import Login from './views/Login.vue'
 import Tests from './views/Tests.vue'
 
 Vue.use(Router)
@@ -14,11 +14,7 @@ export default new Router({
       name: 'home',
       component: Home
     },
-    {
-      path: '/login',
-      name: 'login',
-      component: Login
-    },
+    AuthRoutes,
     {
       path: '/question/:id',
       name: 'question',
@@ -29,5 +25,9 @@ export default new Router({
       name: 'tests',
       component: Tests
     },
+    {
+      redirect: "*",
+      path: "/"
+    }
   ]
 })
