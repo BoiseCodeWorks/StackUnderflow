@@ -1,5 +1,5 @@
 <template>
-  <div class="home container-fluid" style="min-height: calc(98vh - 60px)">
+  <div>
     <div class="main-content">
       <questions />
     </div>

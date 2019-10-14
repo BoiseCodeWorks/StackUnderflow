@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <navbar />
-    <router-view />
+    <div class="home container-fluid" style="min-height: calc(98vh - 60px)">
+      <router-view />
+    </div>
   </div>
 </template>
 
@@ -18,15 +20,15 @@ body {
   background-color: whitesmoke;
   font-family: "Roboto";
 }
-.action{
-  filter: brightness(.8);
-  transition: all .3s linear;
+.action {
+  filter: brightness(0.8);
+  transition: all 0.3s linear;
   cursor: pointer;
 }
 .action:hover {
   filter: brightness(1);
 }
-.square{
+.square {
   border-radius: 0;
 }
 </style>
