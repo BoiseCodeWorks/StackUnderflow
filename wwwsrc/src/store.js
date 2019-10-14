@@ -10,7 +10,9 @@ export default new Vuex.Store({
     user: {},
     suites: [],
     categories: [],
-    questions: []
+    questions: [],
+    question: {},
+    responses: []
   },
   mutations: {
     reloadSuites(state) {

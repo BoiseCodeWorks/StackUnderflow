@@ -7,7 +7,7 @@
       <div class="text-muted d-flex align-items-center" v-if="user.id">
         <span class="pr-2 border-right">{{user.username}}</span>
         <i class="ml-2 fa fa-fw fa-th-large action" data-toggle="dropdown"></i>
-        <div class="dropdown-menu dropdown-menu-right square" aria-labelledby="dropdownMenuButton">
+        <div class="dropdown-menu dropdown-menu-right square no-select" aria-labelledby="dropdownMenuButton">
           <router-link class="dropdown-item action" :to="{name:'tests'}">Tests</router-link>
           <div class="dropdown-divider"></div>
           <span class="dropdown-item action" @click="logout">logout</span>

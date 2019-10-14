@@ -30,12 +30,12 @@ export class QuestionsSuite extends Suite {
         'Can Create a question',
         PATH,
         async () => {
-          if (!store.state.auth.user) {
+          if (!store.state.user) {
             throw new Error("You are not logged in");
           }
           this.question = await this.create(testData)
 
-          if (this.question.name !== testData.name || !this.question.id) {
+          if (this.question.title !== testData.title || !this.question.id) {
             throw new Error("Whoops something failed, unable to create question successfully")
           }
           return new TestReport(true, "Successfully created question " + JSON.stringify(this.question))
@@ -61,11 +61,11 @@ export class QuestionsSuite extends Suite {
         'Can Edit question by question Id',
         PATH + '/:id',
         async () => {
-          this.question.name = "EDITED"
+          this.question.title = "EDITED"
           let res = await this.update(this.question)
 
-          if (res.name != this.question.name) {
-            throw new Error("Unable to edit question")
+          if (res.title != this.question.title) {
+            throw new Error("Unable to edit question: " + JSON.stringify(res))
           }
 
           return new TestReport(true, "Woot able to edit question successfully " + JSON.stringify(this.question))

@@ -31,4 +31,7 @@ body {
 .square {
   border-radius: 0;
 }
+.no-select{
+  user-select: none;
+}
 </style>

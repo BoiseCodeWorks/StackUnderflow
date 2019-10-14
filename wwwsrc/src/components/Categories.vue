@@ -3,6 +3,9 @@
     <div class="m-3 d-flex align-items-center flex-wrap">
       <div class="border bg-white rounded p-1 mr-1">
         <small class="mr-1">Categories:</small>
+        <small class="action text-muted" @click="select({name:''})">
+          <i class="fa fa-fw fa-times ml-1"></i>
+        </small>
       </div>
       <div
         class="border rounded action p-1 mr-1"
@@ -45,7 +48,7 @@ export default {
     }
   },
   methods: {
-    addCategory() {
+    async addCategory() {
       Swal.mixin({
         input: "text",
         confirmButtonText: "Next &rarr;",
@@ -53,10 +56,14 @@ export default {
         progressSteps: ["1"]
       })
         .queue(["Create a new Category"])
-        .then(result => {
+        .then(async result => {
           if (result.value) {
-            api.post("categories", {
+            let res = await api.post("categories", {
               name: result.value[0]
+            });
+            this.$store.commit("setResource", {
+              resource: "categories",
+              data: [...this.categories, res.data]
             });
           }
         });

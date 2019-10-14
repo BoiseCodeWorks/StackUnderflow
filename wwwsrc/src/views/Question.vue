@@ -1,30 +1,42 @@
 <template>
   <div class="m-3" v-if="question.id">
     <div class="card p-2">
-      <h3>{{q.title}}</h3>
-      <p>{{q.body}}</p>
+      <h3 class="bg-warning text-light p-1 text-center rounded">{{question.title}}</h3>
+      <p>{{question.body}}</p>
       <hr />
-      <p>
-        <small class="mr-1 p-1 border" v-for="tag in q.tags" :key="tag.id">
-          <span>{{tag.name}}</span>
-          <i
-            class="fa fa-fw fa-times ml-1"
-            v-if="user.id == question.authorId"
-            @click="removeCat(tag)"
-          ></i>
-        </small>
-        <select v-model="newCat" @change="addCat" v-if="user.id == question.authorId">
-          <option
-            v-for="category in categories"
-            :key="category.id"
-            :value="category"
-          >{{category.name}}</option>
-        </select>
-      </p>
+      <div class="d-flex align-items-center flex-wrap justify-content-between">
+        <div>
+          <small class="mr-1 p-1 border" v-for="tag in question.tags" :key="tag.id">
+            <span>{{tag.name}}</span>
+            <i
+              class="fa fa-fw fa-times ml-1"
+              v-if="user.id == question.authorId"
+              @click="removeCat(tag)"
+            ></i>
+          </small>
+          <select v-model="newCat" @change="addCat" v-if="user.id == question.authorId">
+            <option
+              v-for="category in categories"
+              :key="category.id"
+              :value="category"
+            >{{category.name}}</option>
+          </select>
+        </div>
+        <div
+          v-if="question.authorId == user.id"
+          class="border border-danger p-1 action text-danger"
+          @click="deleteQuestion()"
+        >
+          <i class="fa fa-fw fa-trash"></i>
+        </div>
+      </div>
     </div>
     <div class="card mt-3 p-2" v-for="r in responses" :key="r.id">
       <div class="d-flex align-items-center">
-        <h5 v-if="r.id == q.answerId">
+        <h5 v-if="!question.answerId && question.authorId == user.id">
+          <i @click="markAnswer(r)" class="fa fa-fw fa-check text-muted fa-lg mr-3 action muted"></i>
+        </h5>
+        <h5 v-if="r.id == question.answerId">
           <i class="fa fa-fw fa-check text-success fa-lg mr-3"></i>
         </h5>
         <p>{{r.body}}</p>
@@ -32,11 +44,6 @@
       <hr />
       <div class="d-flex align-items-center justify-content-between p-2">
         <p v-if="r.author">{{r.author.username}}</p>
-        <button
-          v-if="!q.answerId && q.authorId == user.id"
-          @click="markAnswer(r)"
-          class="btn btn-success"
-        >Mark Correct</button>
       </div>
     </div>
     <div class="text-right p-1 mb-3" v-if="user.id">
@@ -56,24 +63,20 @@
 
 <script>
 import Auth from "@/components/Auth.vue";
+import Swal from "sweetalert2";
 import { api, toastError, toast } from "../utils";
 
 export default {
   async mounted() {
     try {
+      await this.getQuestion();
       if (!this.$store.state.categories.length) {
         let catRes = await api.get("categories");
         this.$store.commit("setResource", {
           resource: "categories",
-          data: res.data
+          data: catRes.data
         });
       }
-      let res = await api.get("questions/" + this.route.params.id);
-      let res2 = await api.get(
-        "questions/" + this.route.params.id + "/responses"
-      );
-      this.question = res.data;
-      this.responses = res2.data;
     } catch (e) {
       this.message = "Question not found";
       toastError(e);
@@ -82,18 +85,22 @@ export default {
   name: "Question",
   data() {
     return {
-      question: {},
-      responses: [],
       newCat: {},
       message: "Fetching Question...."
     };
   },
   computed: {
     user() {
-      return this.$store.state.auth.user;
+      return this.$store.state.user;
     },
     categories() {
       return this.$store.state.categories;
+    },
+    question() {
+      return this.$store.state.question;
+    },
+    responses() {
+      return this.$store.state.responses;
     }
   },
   methods: {
@@ -148,8 +155,43 @@ export default {
               questionId: this.question.id,
               body: result.value[0]
             });
+            this.responses.push(res.data);
           }
         });
+    },
+    async getQuestion() {
+      this.clearState()
+      let res = await api.get("questions/" + this.$route.params.id);
+      this.$store.commit("setResource", {
+        resource: "question",
+        data: res.data
+      });
+
+      let res2 = await api.get(
+        "questions/" + this.$route.params.id + "/responses"
+      );
+      this.$store.commit("setResource", {
+        resource: "responses",
+        data: res2.data
+      });
+    },
+    clearState(){
+      this.$store.commit("setResource", {
+        resource: "question",
+        data: {}
+      });
+      this.$store.commit("setResource", {
+        resource: "responses",
+        data: []
+      });
+    },
+    async deleteQuestion() {
+      try {
+        await api.delete("questions/" + this.question.id);
+        this.$router.push("/");
+      } catch (e) {
+        toastError(e);
+      }
     }
   },
   components: {

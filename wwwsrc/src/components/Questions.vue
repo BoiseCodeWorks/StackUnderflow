@@ -24,12 +24,25 @@
           <p class="text-center">It is pretty quiet around here... You should ask a question</p>
         </div>
       </div>
-      <div class="card p-2" v-for="q in questions" :key="q.id">
-        <router-link :to="{name: 'question', params: {id: q.id}}">
-          <h5>{{q.title}}</h5>
-          <p>
-            <span class="mr-1 p-1 bg-dark" v-for="tag in q.tags" :key="tag.id">{{tag.name}}</span>
-          </p>
+      <div
+        class="card p-2 mb-3"
+        v-for="q in filtered"
+        :key="q.id"
+        :class="q.answerId ? 'border border-success':''"
+      >
+        <router-link
+          class="d-flex align-items-center flex-wrap justify-content-between"
+          :to="{name: 'question', params: {id: q.id}}"
+        >
+          <h5 class="m-0">
+            <i v-if="q.answerId" class="fa fa-fw fa-check text-success mr-2"></i>
+            <span>{{q.title}}</span>
+          </h5>
+          <div>
+            <small v-if="q.tags.length">
+              <span class="mr-1 p-1 border" v-for="tag in q.tags" :key="tag.id">{{tag.name}}</span>
+            </small>
+          </div>
         </router-link>
       </div>
     </div>
@@ -62,6 +75,9 @@ export default {
       return this.$store.state.user;
     },
     filtered() {
+      if (!this.query.length) {
+        return this.questions;
+      }
       let q = this.query.toLowerCase();
       return this.questions.filter(q => {
         try {
@@ -76,7 +92,7 @@ export default {
     }
   },
   methods: {
-    addQuestion() {
+    async addQuestion() {
       Swal.mixin({
         input: "text",
         confirmButtonText: "Next &rarr;",
@@ -90,11 +106,15 @@ export default {
           },
           "Describe the Question"
         ])
-        .then(result => {
+        .then(async result => {
           if (result.value) {
-            api.post("questions", {
+            let res = await api.post("questions", {
               title: result.value[0],
               body: result.value[1]
+            });
+            this.$router.push({
+              name: "question",
+              params: { id: res.data.id }
             });
           }
         });
@@ -109,6 +129,11 @@ export default {
 <style>
 a {
   color: orange;
+  transition: all .2s linear;
+}
+a:hover {
+  color: #ffc964;
+  text-decoration: none;
 }
 .searchbar {
   position: relative;

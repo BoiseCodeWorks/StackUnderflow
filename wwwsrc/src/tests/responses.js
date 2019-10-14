@@ -16,6 +16,7 @@ export class ResponsesSuite extends Suite {
         PATH,
         async () => {
           let res = await api.post('questions', {
+            title: "SOMEONE__WILL__RESPOND",
             body: "TEST__QUESTION__RESPONSE",
           })
           this.question = res.data
@@ -24,7 +25,7 @@ export class ResponsesSuite extends Suite {
 
           this.response = await this.create(testData)
 
-          if (this.response.name !== testData.name || !this.response.id) {
+          if (this.response.body !== testData.body || !this.response.id) {
             throw new Error("Whoops something failed, unable to create response successfully")
           }
           return new TestReport(true, "Successfully created response " + JSON.stringify(this.response))
@@ -37,10 +38,10 @@ export class ResponsesSuite extends Suite {
         'Can Edit response by response Id',
         PATH + '/:id',
         async () => {
-          this.response.name = "EDITED"
+          this.response.body = "EDITED"
           let res = await this.update(this.response)
 
-          if (res.name != this.response.name) {
+          if (res.body != this.response.body) {
             throw new Error("Unable to edit response")
           }
 
