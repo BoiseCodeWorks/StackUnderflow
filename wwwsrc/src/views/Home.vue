@@ -13,10 +13,10 @@
         </div>
       </div>
       <div class="m-3">
-        <div v-if="!questions.length" class="d-flex align-items-center justify-content-center" style="min-height: 50vh">
+        <div v-if="!questions.length" class="d-flex align-items-center justify-content-center" style="min-height: 60vh">
           <div style="opacity: .5;">
-            <img class="mb-3" src="quiet.png" alt="">
-            <p>It is pretty quiet around here... You should ask a question</p>
+            <img class="mb-3 img-fluid" src="quiet.png" alt="">
+            <p class="text-center">It is pretty quiet around here... You should ask a question</p>
           </div>
         </div>
         <div class="card p-2" v-for="q in questions" :key="q.id">
