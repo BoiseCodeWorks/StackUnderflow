@@ -30,17 +30,18 @@ export default {
   async mounted() {
     try {
       let res = await api.get("categories");
-      this.categories = res.data;
+      this.$store.commit("setResource", {
+        resource: "categories",
+        data: res.data
+      });
     } catch (e) {}
-  },
-  data() {
-    return {
-      categories: []
-    };
   },
   computed: {
     user() {
       return this.$store.state.user;
+    },
+    categories() {
+      return this.$store.state.categories;
     }
   },
   methods: {

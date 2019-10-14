@@ -8,7 +8,9 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     user: {},
-    suites: []
+    suites: [],
+    categories: [],
+    questions: []
   },
   mutations: {
     reloadSuites(state) {
@@ -19,6 +21,10 @@ export default new Vuex.Store({
     },
     SETUSER(state, user) {
       state.user = user
+    },
+    setResource(state, { resource = "", data }) {
+      if (!data || !resource || !state[resource]) { return }
+      state[resource] = data
     }
   },
   actions: {

@@ -45,12 +45,14 @@ export default {
   async mounted() {
     try {
       let res = await api.get("questions");
-      this.questions = res.data;
+      this.$store.commit("setResource", {
+        resource: "questions",
+        data: res.data
+      });
     } catch (e) {}
   },
   data() {
     return {
-      questions: [],
       question: {},
       query: ""
     };
@@ -68,6 +70,9 @@ export default {
           return false;
         }
       });
+    },
+    questions() {
+      return this.$store.state.questions;
     }
   },
   methods: {
