@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import { authService } from "./AuthService";
 export default {
   name: "Register",
   data() {
@@ -50,8 +51,13 @@ export default {
     };
   },
   methods: {
-    register() {
-      this.$store.dispatch("register", this.newUser);
+    async register() {
+      try {
+        let user = await authService.register(this.newUser);
+        this.$router.push("/");
+      } catch (e) {
+        toastError(e);
+      }
     }
   }
 };
