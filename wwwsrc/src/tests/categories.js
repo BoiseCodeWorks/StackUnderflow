@@ -47,7 +47,7 @@ export class CategoriesSuite extends Suite {
         "Questions/:id/categories",
         async () => {
 
-          let qres = await api.post('questions', { title: "a new question", description: "some question goes here" })
+          let qres = await api.post('questions', { title: "a new question", body: "some question goes here" })
 
           this.question = qres.data
 
